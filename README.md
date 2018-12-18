@@ -1,13 +1,22 @@
 # icinga2_vmware_snapshots
-Icinga2 Check for monitoring the Age und Count of VMware Snapshots.
+Icinga2 Check for monitoring age and count of VMware Snapshots.
 
-I modified the Original Check from https://github.com/simonmeggle/check_vmware_snapshots, by changing the Perl Nagios::Plugin to the Monitoring::Plugin. I also added Icinga Command Definitions.
+I modified the Original Check from [simonmeggle](https://github.com/simonmeggle/check_vmware_snapshots), to use the Monitoring::Plugin instead the old Nagios::Plugin which is not available on CPAN anymore.
+
+I also added Icinga Command Definitions to integrate the Check easier into your Icinga Installation.
+
+---
 
 ## How to Use
-Put the Plugin check_vmware_snapshots.pl in the IcingaPluginDir.
-Put the Icinga Command Definitions in your Icinga Configuration Directory.
-Add the Checks to your hosts.
+1. Put the Plugin check_vmware_snapshots.pl in the Icinga-PluginDir.
+2. Put the Icinga Command Definitions in your Icinga-ConfigDir.
+3. Define and Apply the Services.
+4. Configure the Service through your Hosts according to your needs.
 
+There are already Defaultthresholds set in the Command Definition change them if needed.
+You can also check the script itself for documentation and examples.
+
+---
 
 ## Example
 ### Services
