@@ -1,5 +1,14 @@
 #!/usr/bin/perl
- $ENV{PERL_LWP_SSL_VERIFY_HOSTNAME} = 0;
+
+BEGIN {
+$ENV{'PERL_LWP_SSL_VERIFY_HOSTNAME'} = 0;
+eval {
+# required for new IO::Socket::SSL versions
+require IO::Socket::SSL;
+IO::Socket::SSL->import();
+IO::Socket::SSL::set_ctx_defaults( SSL_verify_mode => 0 );
+};
+};
 
 # check_vmware_snapshots.pl
 # Extra packages required (URL given for vMA suitable RPMs)
@@ -21,11 +30,13 @@
 # along With this program; If Not, write To the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# VERSION 0.17 
+# VERSION 0.18 
 #
 # Version history:
+# 2019/12/11 - v0.18
+# 		fixes "Server version unavailable" Error (Thanks to PetrMa)
 # 2018/12/17 - v0.17 
-#        now uses Monitoring::Plugin instead of Nagios::Plugin(not in cpan anymore)
+#        	now uses Monitoring::Plugin instead of Nagios::Plugin(not in cpan anymore)
 # 2015/05/29 - v0.16
 #		added properties to API query; improves execution speed. (Thanks to Natxo Asenjo) 
 # 2013/12/24 - v0.15
