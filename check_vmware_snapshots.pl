@@ -30,9 +30,12 @@ IO::Socket::SSL::set_ctx_defaults( SSL_verify_mode => 0 );
 # along With this program; If Not, write To the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# VERSION 0.18 
+# VERSION 0.19
 #
 # Version history:
+# 2026/04/11 - v0.19
+#		fixed whitelist bug when using match_snapshot_names (vm name filter ran before snapshot names were checked)
+#		blacklist/whitelist now mention regex alternation in help text (e.g. 'VM1|VM2')
 # 2019/12/11 - v0.18
 # 		fixes "Server version unavailable" Error (Thanks to PetrMa)
 # 2018/12/17 - v0.17 
@@ -148,13 +151,13 @@ my %opts = (
     blacklist => {
         type     => "=s",
         variable => "blacklist",
-        help     => "regex blacklist",
+        help     => "regex blacklist. Use alternation to exclude multiple VMs, e.g. 'VM1|VM2|Template.*'",
         required => 0,
     },
     whitelist => {
         type     => "=s",
         variable => "whitelist",
-        help     => "regex whitelist",
+        help     => "regex whitelist. Use alternation to include multiple VMs, e.g. 'VM1|VM2|Prod.*'",
         required => 0,
     },
     separator => {
@@ -220,7 +223,7 @@ foreach my $vm_view ( @{$vms} ) {
 
     next unless defined $vm_snapinfo;
     next if (isblacklisted(\$blacklist,$vm_name ));
-    next if (isnotwhitelisted(\$whitelist,$vm_name));
+    next if ($match_snapshot_names == 0 && isnotwhitelisted(\$whitelist,$vm_name));
     if ( uc($mode) eq "AGE" ) {
         check_snapshot_age( $vm_name, $vm_snapinfo->{rootSnapshotList} );
     }
